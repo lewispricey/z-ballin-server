@@ -18,7 +18,7 @@ describe("/auth/register", () => {
       };
 
       const { body, status } = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
 
       const expectedResponse = { user: { email: "testemail@ridesafe.com" } };
@@ -33,7 +33,7 @@ describe("/auth/register", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
 
       const expectedResponse = { msg: "account creation failed" };
@@ -49,7 +49,7 @@ describe("/auth/register", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
 
       const expectedResponse = { msg: "account creation failed" };
@@ -65,7 +65,7 @@ describe("/auth/register", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
 
       const expectedResponse = { msg: "account creation failed" };
@@ -81,12 +81,12 @@ describe("/auth/register", () => {
       };
 
       const response1 = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
       expect(response1.status).toBe(201);
 
       const { status, body } = await request(app)
-        .post("/api/auth/register")
+        .post("/auth/register")
         .send(postBody);
 
       const expectedResponse = { msg: "account creation failed" };
@@ -106,7 +106,7 @@ describe("/auth/login", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/login")
+        .post("/auth/login")
         .send(postBody);
 
       expect(status).toBe(200);
@@ -120,7 +120,7 @@ describe("/auth/login", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/login")
+        .post("/auth/login")
         .send(postBody);
 
       expect(status).toBe(400);
@@ -133,7 +133,7 @@ describe("/auth/login", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/login")
+        .post("/auth/login")
         .send(postBody);
 
       expect(status).toBe(400);
@@ -147,7 +147,7 @@ describe("/auth/login", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/login")
+        .post("/auth/login")
         .send(postBody);
 
       expect(status).toBe(400);
@@ -161,7 +161,7 @@ describe("/auth/login", () => {
       };
 
       const { status, body } = await request(app)
-        .post("/api/auth/login")
+        .post("/auth/login")
         .send(postBody);
 
       expect(status).toBe(400);
