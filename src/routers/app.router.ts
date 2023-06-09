@@ -2,12 +2,12 @@ import express, { Router } from "express";
 import authRouter from "./auth.subrouter";
 import customError from "../errors/customError";
 
-const apiRouter: Router = express.Router();
+const appRouter: Router = express.Router();
 
 // sub routers
-apiRouter.use("/auth", authRouter);
+appRouter.use("/auth", authRouter);
 
 // error handling middleware
-apiRouter.use(customError);
+appRouter.use(customError);
 
-export default apiRouter;
+export default appRouter;
