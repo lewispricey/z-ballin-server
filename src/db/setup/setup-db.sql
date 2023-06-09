@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS ballin_dev;
+DROP DATABASE IF EXISTS ballin_test;
+
+CREATE DATABASE ballin_dev;
+CREATE DATABASE ballin_test;
