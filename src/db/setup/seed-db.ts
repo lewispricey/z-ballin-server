@@ -11,11 +11,11 @@ const setupTables = async () => {
         email VARCHAR(256) UNIQUE NOT NULL,
         password VARCHAR NOT NULL
         );`);
-  //   await db.query(`CREATE TABLE profile(
-  //     profile_id SERIAL PRIMARY KEY,
-  //     user_id INT REFERENCES users(user_id),
-  //     fiat_balance DECIMAL(12,2) DEFAULT 10000
-  //   );`);
+  await db.query(`CREATE TABLE profile(
+      profile_id SERIAL PRIMARY KEY,
+      user_id INT REFERENCES users(user_id),
+      fiat_balance DECIMAL(12,2) DEFAULT 10000
+    );`);
 };
 
 const addData = async () => {
@@ -26,15 +26,15 @@ const addData = async () => {
       ($1, $2) 
       RETURNING*;`,
     [
-      "test@lprice.dev",
+      "testuser@ridesafe.com",
       "$argon2id$v=19$m=65536,t=12,p=4$xtuHAXS+877DIrv9Viob8Q$qZWhV5oI7skCki7kcK+ZcwSZ/46631p5etD0HN6Cngg",
     ]
   );
-  //   await db.query(
-  //     `INSERT INTO profile(user_id)
-  //       VALUES($1);`,
-  //     [userResponse.rows[0].user_id]
-  //   );
+  await db.query(
+    `INSERT INTO profile(user_id)
+        VALUES($1);`,
+    [userResponse.rows[0].user_id]
+  );
 };
 
 const seedDb = async () => {
