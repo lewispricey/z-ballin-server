@@ -10,7 +10,6 @@ const selectAccounts = (userId: number) => {
       [userId]
     )
     .then(({ rows }) => {
-      console.log(rows);
       return rows;
     });
 };
