@@ -12,6 +12,12 @@ const accounts = [
     balance: -50,
   },
   {
+    email: "secondaryuser@lprice.dev",
+    account_name: "secondary users credit card",
+    account_type: "credit",
+    balance: -10,
+  },
+  {
     email: "testuser@lprice.dev",
     account_name: "my savings account",
     account_type: "savings",
@@ -22,12 +28,6 @@ const accounts = [
     account_name: "secondary users current account",
     account_type: "debit",
     balance: 200,
-  },
-  {
-    email: "secondaryuser@lprice.dev",
-    account_name: "secondary users credit card",
-    account_type: "credit",
-    balance: -10,
   },
 ];
 export default accounts;
