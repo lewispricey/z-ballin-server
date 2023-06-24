@@ -55,6 +55,12 @@ describe("/categories", () => {
         expect(category).toHaveProperty("isexpense", false);
       });
     });
+    test("401 - responds with unauthorised when missing a valid auth token", async () => {
+      const { status, body } = await request(app).get("/api/categories");
+
+      expect(status).toBe(401);
+      expect(body.msg).toBe("Unauthorized");
+    });
   });
 });
 
