@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
+import { string } from "pg-format";
 const ENV = process.env.NODE_ENV || "dev";
 const pathToCorrectEnvFile = `${__dirname}/../../../.env.${ENV}`;
 

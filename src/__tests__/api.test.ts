@@ -57,3 +57,31 @@ describe("/categories", () => {
     });
   });
 });
+
+describe("/accounts", () => {
+  describe("GET", () => {
+    test("200 - responds with an array of account objects for the logged in user", async () => {
+      const { status, body } = await request(app)
+        .get("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` });
+
+      const { accounts } = body;
+      expect(status).toBe(200);
+      expect(accounts).toBeInstanceOf(Array);
+      expect(accounts.length > 0).toBe(true);
+      accounts.forEach((account: any) => {
+        expect(account).toHaveProperty("account_id", expect.any(Number));
+        expect(account).toHaveProperty("user_id", 1);
+        expect(account).toHaveProperty("account_name", expect.any(String));
+        expect(account).toHaveProperty("account_type", expect.any(String));
+        expect(account).toHaveProperty("balance", expect.any(String));
+      });
+    });
+    test("401 - responds with unauthorised when missing a valid auth token", async () => {
+      const { status, body } = await request(app).get("/api/accounts");
+
+      expect(status).toBe(401);
+      expect(body.msg).toBe("Unauthorized");
+    });
+  });
+});
