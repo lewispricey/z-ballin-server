@@ -90,4 +90,105 @@ describe("/accounts", () => {
       expect(body.msg).toBe("Unauthorized");
     });
   });
+  describe("POST", () => {
+    test("201 - responds with the created account", async () => {
+      const accountToAdd = {
+        accountName: "Help To Buy ISA",
+        accountType: "savings",
+        balance: 1000,
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` })
+        .send(accountToAdd);
+
+      const { account } = body;
+
+      expect(status).toBe(201);
+      expect(account).toHaveProperty("account_id", expect.any(Number));
+      expect(account).toHaveProperty("user_id", 1);
+      expect(account).toHaveProperty("account_name", "Help To Buy ISA");
+      expect(account).toHaveProperty("account_type", "savings");
+      expect(account).toHaveProperty("balance", "1000.00");
+    });
+    test("201 - ignores additional body properties", async () => {
+      const accountToAdd = {
+        userId: 2,
+        accountName: "Credit Card",
+        accountType: "credit",
+        balance: 50,
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` })
+        .send(accountToAdd);
+
+      const { account } = body;
+
+      expect(status).toBe(201);
+      expect(account).toHaveProperty("account_id", expect.any(Number));
+      expect(account).toHaveProperty("user_id", 1);
+      expect(account).toHaveProperty("account_name", "Credit Card");
+      expect(account).toHaveProperty("account_type", "credit");
+      expect(account).toHaveProperty("balance", "50.00");
+    });
+    test("400 - returns an error when request body is missing the accountName property", async () => {
+      const accountToAdd = {
+        accountType: "credit",
+        balance: 50,
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` })
+        .send(accountToAdd);
+
+      expect(status).toBe(400);
+      expect(body.msg).toBe("Request is missing required properties");
+    });
+    test("400 - returns an error when request body is missing the accountType property", async () => {
+      const accountToAdd = {
+        accountName: "test",
+        balance: 50,
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` })
+        .send(accountToAdd);
+
+      expect(status).toBe(400);
+      expect(body.msg).toBe("Request is missing required properties");
+    });
+    test("400 - returns an error when request body is missing the balance property", async () => {
+      const accountToAdd = {
+        accountName: "test",
+        accountType: "credit",
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .set({ Authorization: `Bearer ${token}` })
+        .send(accountToAdd);
+
+      expect(status).toBe(400);
+      expect(body.msg).toBe("Request is missing required properties");
+    });
+    test("401 - responds with unauthorized when missing a vaid auth token", async () => {
+      const accountToAdd = {
+        accountName: "Help To Buy ISA",
+        accountType: "savings",
+        balance: 1000,
+      };
+
+      const { status, body } = await request(app)
+        .post("/api/accounts")
+        .send(accountToAdd);
+
+      expect(status).toBe(401);
+      expect(body.msg).toBe("Unauthorized");
+    });
+  });
 });
