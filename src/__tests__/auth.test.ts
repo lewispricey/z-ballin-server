@@ -1,10 +1,11 @@
 import app from "../app";
 import request from "supertest";
-import seedDb from "../db/setup/seed-db";
 import db from "../db/connection";
+import seed from "../db/setup/seed";
+import data from "../db/setup/data";
 
 beforeEach(async () => {
-  await seedDb();
+  await seed(data);
 });
 
 afterAll(() => db.end());
@@ -13,7 +14,7 @@ describe("/auth/register", () => {
   describe("POST", () => {
     test("201 - returns a new user confirmation upon successful registration", async () => {
       const postBody = {
-        email: "testemail@ridesafe.com",
+        email: "testemailaddress@lprice.dev",
         password: "P4ssW0RD!",
       };
 
@@ -21,7 +22,9 @@ describe("/auth/register", () => {
         .post("/auth/register")
         .send(postBody);
 
-      const expectedResponse = { user: { email: "testemail@ridesafe.com" } };
+      const expectedResponse = {
+        user: { email: "testemailaddress@lprice.dev" },
+      };
 
       expect(status).toBe(201);
       expect(body).toEqual(expectedResponse);
@@ -29,7 +32,7 @@ describe("/auth/register", () => {
 
     test("400 - returns an error when password invalid", async () => {
       const postBody = {
-        email: "testemail@ridesafe.com",
+        email: "testemailaddress@lprice.dev",
       };
 
       const { status, body } = await request(app)
@@ -44,7 +47,7 @@ describe("/auth/register", () => {
 
     test("400 - returns an error when email invalid", async () => {
       const postBody = {
-        email: "ridesafe.com",
+        email: "lprice.dev",
         password: "P4ssW0RD!",
       };
 
@@ -60,7 +63,7 @@ describe("/auth/register", () => {
 
     test("400 - returns an error when password does not meet requirements", async () => {
       const postBody = {
-        email: "testemail@ridesafe.com",
+        email: "testemailaddress@lprice.dev",
         password: "password1",
       };
 
@@ -76,7 +79,7 @@ describe("/auth/register", () => {
 
     test("400 - returns an error when trying to reuse an email in the DB", async () => {
       const postBody = {
-        email: "testemail@ridesafe.com",
+        email: "testemailaddress@lprice.dev",
         password: "P4ssW0RD!",
       };
 
@@ -101,7 +104,7 @@ describe("/auth/login", () => {
   describe("POST", () => {
     test("200 - returns a JWT access token upon successful login", async () => {
       const postBody = {
-        email: "testuser@ridesafe.com",
+        email: "testuser@lprice.dev",
         password: "isS1ANZ*#ESaRVIUgdnC9!$*",
       };
 
@@ -142,7 +145,7 @@ describe("/auth/login", () => {
 
     test("400 - returns an error if email isn't registered", async () => {
       const postBody = {
-        email: "notRegistered@ridesafe.com",
+        email: "notRegistered@lprice.dev",
         password: "isS1ANZ*#ESaRVIUgdnC9!$*",
       };
 
@@ -156,7 +159,7 @@ describe("/auth/login", () => {
 
     test("400 - returns an error if the password does not compute to the saved hash", async () => {
       const postBody = {
-        email: "testuser@ridesafe.com",
+        email: "testuser@lprice.dev",
         password: "P4ssW0RD!",
       };
 
