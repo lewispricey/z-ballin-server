@@ -11,6 +11,9 @@ const psqlError = (
       .status(400)
       .send({ msg: "Request is missing required properties" });
   }
+  if (error.code === "22P02") {
+    return response.status(400).send({ msg: "invalid id" });
+  }
   next(error);
 };
 

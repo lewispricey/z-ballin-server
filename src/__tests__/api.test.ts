@@ -192,3 +192,51 @@ describe("/accounts", () => {
     });
   });
 });
+
+describe("/accounts/:id", () => {
+  describe("GET", () => {
+    test("200 - responds with the requested of account object", async () => {
+      const { status, body } = await request(app)
+        .get("/api/accounts/1")
+        .set({ Authorization: `Bearer ${token}` });
+      const { account } = body;
+      expect(status).toBe(200);
+      expect(account).toHaveProperty("account_id", 1);
+      expect(account).toHaveProperty("user_id", 1);
+      expect(account).toHaveProperty("account_name", expect.any(String));
+      expect(account).toHaveProperty("account_type", expect.any(String));
+      expect(account).toHaveProperty("balance", expect.any(String));
+      expect(account).toHaveProperty("transactions", expect.any(Array));
+    });
+    test("404 - responds with a not found error when given an account id not linked to the current user", async () => {
+      const { status, body } = await request(app)
+        .get("/api/accounts/3")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(404);
+      expect(msg).toBe("account not found");
+    });
+    test("404 - responds with a not found error when given an account id that does not exist", async () => {
+      const { status, body } = await request(app)
+        .get("/api/accounts/9999")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(404);
+      expect(msg).toBe("account not found");
+    });
+    test("400 - responds with a bad request error when given an account id that is not a number", async () => {
+      const { status, body } = await request(app)
+        .get("/api/accounts/notaId")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(400);
+      expect(msg).toBe("invalid id");
+    });
+    test("401 - responds with unauthorised when missing a valid auth token", async () => {
+      const { status, body } = await request(app).get("/api/accounts/1");
+      const { msg } = body;
+      expect(status).toBe(401);
+      expect(msg).toBe("Unauthorized");
+    });
+  });
+});
