@@ -239,4 +239,44 @@ describe("/accounts/:id", () => {
       expect(msg).toBe("Unauthorized");
     });
   });
+  describe("DELETE", () => {
+    test("204 - responds with no body when the account is deleted", async () => {
+      const { status, body } = await request(app)
+        .delete("/api/accounts/4")
+        .set({ Authorization: `Bearer ${token}` });
+      expect(status).toBe(204);
+      expect(body).toEqual({});
+      // add transactions are removed from the DB - upon endpoint complete
+    });
+    test("404 - responds with a not found error when deleting an account id is not linked to the user", async () => {
+      const { status, body } = await request(app)
+        .delete("/api/accounts/3")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(404);
+      expect(msg).toBe("account not found");
+    });
+    test("404 - responds with a not found error when the account id does not exist", async () => {
+      const { status, body } = await request(app)
+        .delete("/api/accounts/9999")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(404);
+      expect(msg).toBe("account not found");
+    });
+    test("400 - responds with an invalid id error when passed an invalid id", async () => {
+      const { status, body } = await request(app)
+        .delete("/api/accounts/notaId")
+        .set({ Authorization: `Bearer ${token}` });
+      const { msg } = body;
+      expect(status).toBe(400);
+      expect(msg).toBe("invalid id");
+    });
+    test("401 - responds with unauthorised when missing a valid auth token", async () => {
+      const { status, body } = await request(app).delete("/api/accounts/2");
+      const { msg } = body;
+      expect(status).toBe(401);
+      expect(msg).toEqual("Unauthorized");
+    });
+  });
 });
